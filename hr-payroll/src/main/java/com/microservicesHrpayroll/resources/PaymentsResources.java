@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.microservicesHrpayroll.entities.Payments;
-import com.microservicesHrpayroll.services.PaymentServices;
+import com.microservicesHrpayroll.services.PaymentService;
+
 
 @RestController
 @RequestMapping(value = "/payments")
 public class PaymentsResources {
 
 	@Autowired
-	private PaymentServices service;
+	private PaymentService service;
 
 	@GetMapping(value = "/{workerId}/days/{days}")
 	public ResponseEntity<Payments> getPayment(@PathVariable Long workerId, @PathVariable Integer days) {
