@@ -1,15 +1,12 @@
 package com.microservicesHrpayroll.services;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.microservicesHrpayroll.entities.Payments;
 import com.microservicesHrpayroll.entities.Worker;
+import com.microservicesHrpayroll.feignClients.WorkerFeignClients;
 
 @Service
 public class PaymentService {
@@ -18,13 +15,11 @@ public class PaymentService {
 	private String workerHost;
 
 	@Autowired
-	private RestTemplate restTemplate;
+	private WorkerFeignClients workerFeignclients;
 
 	public Payments getPayment(long workerId, int days) {
-		Map<String, String> uriVariables = new HashMap<>();
-		uriVariables.put("id", ""+workerId);
 
-		Worker worker = restTemplate.getForObject(workerHost + "/workers/{id}", Worker.class, uriVariables); 
+		Worker worker = workerFeignclients.findById(workerId).getBody();
 		return new Payments(worker.getName(), worker.getDailyIncome(), days);
 	}
 }
